@@ -12,7 +12,7 @@ jobs:
   test:
     needs: [lint]
     runs-on: ubuntu-latest
-    service:
+    services:
       redis:
         image: redis:latest
         ports:
