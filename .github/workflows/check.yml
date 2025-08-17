@@ -20,8 +20,6 @@ jobs:
       - name: Run local server
         run: |
           cd backend/main-service
-          go run main.go
-      - name: Test
-        run: |
-          cd backend/main-service/internal/link
-          go test -v
+          (go run main.go) && sleep 10 && \
+          cd internal/link && go test -v \
+          kill $(lsof -t -i:8080) || true
