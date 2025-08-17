@@ -17,9 +17,19 @@ jobs:
         uses: actions/checkout@v3
       - name: Install requirements
         run: go mod tidy
-      - name: Run local server
+
+      - name: Start server
         run: |
           cd backend/main-service
-          (go run main.go) && sleep 10 && \
-          cd internal/link && go test -v \
-          kill $(lsof -t -i:8080) || true
+          nohup go run main.go & echo $! > server.pid
+          sleep 10
+
+      - name: Run tests
+        run: |
+          cd backend/main-service/internal/link
+          go test -v
+
+      - name: Stop server
+        if: always()
+        run: |
+          kill $(cat backend/main-service/server.pid) || true
