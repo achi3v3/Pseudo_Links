@@ -17,6 +17,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Install requirements
         run: go mod tidy
+      - name: Run local server
+        run: |
+          cd backend/main-service
+          go run main.go
       - name: Test
         run: |
           cd backend/main-service/internal/link
