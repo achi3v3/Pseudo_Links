@@ -5,9 +5,22 @@ import (
 	"main-service/backend/main-service/internal/link"
 	"net/http"
 
+	_ "main-service/backend/main-service/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
+// @title Swagger PseudoLink API
+// @version 1.0
+// @description Generated API-cellers on server
+
+// @contact.url https://github.com/achi3v3
+// @contact.email aamir-tutaev@mail.ru
+
+// @host localhost:8080
+// @BasePath /
 func main() {
 	redisClient := database.Init()
 	defer redisClient.Close()
@@ -17,7 +30,7 @@ func main() {
 	linkHandler := link.NewLinkHandler(linkService)
 
 	router := gin.Default()
-
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	linkGroup := router.Group("/link")
 	{
 		linkGroup.POST("/create", linkHandler.Create)

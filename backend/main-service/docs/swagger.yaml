@@ -1,0 +1,62 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    email: aamir-tutaev@mail.ru
+    url: https://github.com/achi3v3
+  description: Generated API-cellers on server
+  title: Swagger PseudoLink API
+  version: "1.0"
+paths:
+  /link/create:
+    post:
+      consumes:
+      - application/json
+      description: Create pseudo name for your url-link
+      parameters:
+      - description: URL-Link
+        in: path
+        name: origin_link
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Create pseudo link
+      tags:
+      - Link
+  /link/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete your struct link on url
+      parameters:
+      - description: URL-Link
+        in: path
+        name: origin_link
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete link
+      tags:
+      - Link
+  /link/get:
+    get:
+      consumes:
+      - application/json
+      description: Return your struct link on url
+      parameters:
+      - description: URL-Link
+        in: path
+        name: origin_link
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get pseudo link
+      tags:
+      - Link
+swagger: "2.0"

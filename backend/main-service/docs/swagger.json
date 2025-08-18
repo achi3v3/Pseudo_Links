@@ -1,0 +1,91 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Generated API-cellers on server",
+        "title": "Swagger PseudoLink API",
+        "contact": {
+            "url": "https://github.com/achi3v3",
+            "email": "aamir-tutaev@mail.ru"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/link/create": {
+            "post": {
+                "description": "Create pseudo name for your url-link",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Link"
+                ],
+                "summary": "Create pseudo link",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "URL-Link",
+                        "name": "origin_link",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/link/delete": {
+            "delete": {
+                "description": "Delete your struct link on url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Link"
+                ],
+                "summary": "Delete link",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "URL-Link",
+                        "name": "origin_link",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/link/get": {
+            "get": {
+                "description": "Return your struct link on url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Link"
+                ],
+                "summary": "Get pseudo link",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "URL-Link",
+                        "name": "origin_link",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    }
+}

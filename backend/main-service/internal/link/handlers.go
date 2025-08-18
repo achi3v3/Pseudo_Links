@@ -15,6 +15,14 @@ func NewLinkHandler(service *LinkService) *LinkHandler {
 	return &LinkHandler{service: service}
 }
 
+// Create godoc
+// @Summary Create pseudo link
+// @Description Create pseudo name for your url-link
+// @Tags Link
+// @Accept json
+// @Produce json
+// @Param origin_link path string true "URL-Link"
+// @Router /link/create [post]
 func (h *LinkHandler) Create(ctx *gin.Context) {
 	var jsonBody struct {
 		OriginLink string `json:"origin_link" binding:"required"`
@@ -44,6 +52,14 @@ func (h *LinkHandler) Create(ctx *gin.Context) {
 	})
 }
 
+// Get godoc
+// @Summary Get pseudo link
+// @Description Return your struct link on url
+// @Tags Link
+// @Accept json
+// @Produce json
+// @Param origin_link path string true "URL-Link"
+// @Router /link/get [get]
 func (h *LinkHandler) Get(ctx *gin.Context) {
 	originLink := ctx.Query("origin_link")
 	if originLink == "" {
@@ -73,6 +89,14 @@ func (h *LinkHandler) Get(ctx *gin.Context) {
 	})
 }
 
+// Delete godoc
+// @Summary Delete link
+// @Description Delete your struct link on url
+// @Tags Link
+// @Accept json
+// @Produce json
+// @Param origin_link path string true "URL-Link"
+// @Router /link/delete [delete]
 func (h *LinkHandler) Delete(ctx *gin.Context) {
 	originLink := ctx.Query("origin_link")
 	if originLink == "" {
