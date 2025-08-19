@@ -1,11 +1,12 @@
 package main
 
 import (
-	"main-service/backend/main-service/internal/database"
-	"main-service/backend/main-service/internal/link"
+	"main-service/internal/database"
+	"main-service/internal/link"
+	"main-service/internal/logger"
 	"net/http"
 
-	_ "main-service/backend/main-service/docs"
+	_ "main-service/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
@@ -22,6 +23,8 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
+	logger.NewLogger()
+
 	redisClient := database.Init()
 	defer redisClient.Close()
 
@@ -40,5 +43,6 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Привет, Gin!")
 	})
+
 	router.Run(":8080")
 }

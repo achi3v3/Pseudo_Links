@@ -2,7 +2,7 @@ package link
 
 import (
 	"fmt"
-	"main-service/backend/main-service/internal/models"
+	"main-service/internal/models"
 )
 
 type LinkService struct {

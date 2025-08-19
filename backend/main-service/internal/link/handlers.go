@@ -1,7 +1,7 @@
 package link
 
 import (
-	"main-service/backend/main-service/internal/models"
+	"main-service/internal/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

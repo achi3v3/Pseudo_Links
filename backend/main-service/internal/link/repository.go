@@ -2,7 +2,7 @@ package link
 
 import (
 	"context"
-	"main-service/backend/main-service/internal/models"
+	"main-service/internal/models"
 	"time"
 
 	"github.com/redis/go-redis/v9"
