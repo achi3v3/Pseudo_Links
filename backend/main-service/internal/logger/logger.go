@@ -7,8 +7,6 @@ import (
 )
 
 func NewLogger() {
-	time.Sleep(10 * time.Second)
-
 	file, err := os.OpenFile("/logs/app.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Printf("Failed to open log file: %v", err)

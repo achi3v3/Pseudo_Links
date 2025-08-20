@@ -4,6 +4,7 @@ import (
 	"main-service/internal/database"
 	"main-service/internal/link"
 	"main-service/internal/logger"
+	"main-service/internal/metrics"
 	"net/http"
 
 	_ "main-service/docs"
@@ -23,7 +24,6 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	logger.NewLogger()
 
 	redisClient := database.Init()
 	defer redisClient.Close()
@@ -43,6 +43,11 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Привет, Gin!")
 	})
+	logger.NewLogger()
+
+	go func() {
+		_ = metrics.Listen("127.0.0.1:8080")
+	}()
 
 	router.Run(":8080")
 }
