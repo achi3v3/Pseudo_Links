@@ -31,12 +31,12 @@ func (s *LinkService) Create(originLink string) (string, error) {
 	})
 }
 
-func (s *LinkService) GetLink(originLink string) (*models.Link, error) {
-	if originLink == "" {
+func (s *LinkService) GetLink(link string) (*models.Link, error) {
+	if link == "" {
 		return nil, fmt.Errorf("error: Empty link")
 	}
-	link, err := s.repo.Find(originLink)
-	return link, err
+	linkObject, err := s.repo.Find(link)
+	return linkObject, err
 }
 
 func (s *LinkService) DeleteLink(originLink string) error {
