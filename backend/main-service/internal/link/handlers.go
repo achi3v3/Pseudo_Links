@@ -60,7 +60,7 @@ func (h *LinkHandler) Create(ctx *gin.Context) {
 // @Produce json
 // @Param origin_link path string true "URL-Link"
 // @Router /link/get [get]
-func (h *LinkHandler) Get(ctx *gin.Context) {
+func (h *LinkHandler) GetPseudo(ctx *gin.Context) {
 	originLink := ctx.Query("origin_link")
 	if originLink == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -100,7 +100,10 @@ func (h *LinkHandler) Get(ctx *gin.Context) {
 func (h *LinkHandler) Delete(ctx *gin.Context) {
 	originLink := ctx.Query("origin_link")
 	if originLink == "" {
-
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "origin_link parameter is required",
+		})
+		return
 	}
 	if err := h.service.DeleteLink(originLink); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
