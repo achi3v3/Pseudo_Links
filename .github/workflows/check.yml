@@ -28,21 +28,25 @@ jobs:
           cd backend/main-service
           go mod tidy
 
-      - name: Check Redis connectivity
-        run: |
-          cd backend/main-service
-          echo "Testing Redis connectivity..."
-          redis-cli -h localhost -p 6379 ping
-
       - name: Start server
         run: |
           cd backend/main-service
-          echo "Starting server..."
           nohup go run main.go > server.log 2>&1 & echo $! > server.pid
-          sleep 10
-          echo "Server log:"
-          cat server.log || true
 
+
+      - name: Wait for server to be ready
+        run: |
+          for i in {1..15}; do
+            if nc -z localhost 8080; then
+              echo "Server is up"
+              exit 0
+            fi
+            echo "Waiting for server..."
+            sleep 1
+          done
+          echo "Server did not start"
+          cat backend/main-service/server.log
+          exit 1
       - name: Run tests
         run: |
           cd backend/main-service/internal/link
@@ -53,3 +57,4 @@ jobs:
         run: |
           cd backend/main-service
           kill $(cat server.pid) || true
+

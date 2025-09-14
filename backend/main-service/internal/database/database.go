@@ -3,20 +3,20 @@ package database
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
+	"github.com/sirupsen/logrus"
 )
 
 var client *redis.Client
 
-func Init() *redis.Client {
+func Init(log *logrus.Logger) *redis.Client {
 	if err := godotenv.Load(); err != nil {
-		log.Printf("Warning: Error loading .env file: %v", err)
+		log.Warnf("Warning: Error loading .env file: %v", err)
 	}
 
 	host := getEnv("REDIS_HOST", "localhost")
@@ -24,7 +24,7 @@ func Init() *redis.Client {
 	password := getEnv("REDIS_PASSWORD", "")
 	db, _ := strconv.Atoi(getEnv("REDIS_DB", "0"))
 
-	log.Printf("Connecting to Redis at %s:%s", host, port)
+	log.Infof("Connecting to Redis at %s:%s", host, port)
 
 	client = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
@@ -37,10 +37,10 @@ func Init() *redis.Client {
 
 	_, err := client.Ping(ctx).Result()
 	if err != nil {
-		log.Printf("Error connecting to Redis: %v", err)
+		log.Errorf("Error connecting to Redis: %v", err)
 		panic(fmt.Sprintf("Failed to connect to Redis: %v", err))
 	}
-	log.Println("Redis connected successfully")
+	log.Infof("Redis connected successfully")
 	return client
 
 }
@@ -51,9 +51,9 @@ func getEnv(key, defaultValue string) string {
 	return defaultValue
 }
 
-func GetClient() *redis.Client {
+func GetClient(logger *logrus.Logger) *redis.Client {
 	if client == nil {
-		client = Init()
+		client = Init(logger)
 	}
 	return client
 }

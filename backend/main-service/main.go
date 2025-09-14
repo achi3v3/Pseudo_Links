@@ -1,12 +1,12 @@
 package main
 
 import (
-	"log"
 	"main-service/internal/database"
 	"main-service/internal/link"
-	"main-service/internal/logger"
 	"main-service/internal/metrics"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 
 	_ "main-service/docs"
 
@@ -25,9 +25,10 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	log.Println("Starting server...")
-
-	redisClient := database.Init()
+	logger := logrus.New()
+	logger.SetLevel(logrus.DebugLevel)
+	logger.Info("[ START ]")
+	redisClient := database.Init(logger)
 	defer redisClient.Close()
 
 	linkRepo := link.NewLinkRepository(redisClient)
@@ -45,13 +46,15 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Привет, Gin!")
 	})
-	logger.NewLogger()
 
 	go func() {
-		log.Println("Starting metrics server on 127.0.0.1:8081...")
-		_ = metrics.Listen("127.0.0.1:8081")
+		if err := metrics.Listen("127.0.0.1:9090"); err != nil {
+			logger.Warnf("error with listen metrics %v", err)
+		}
 	}()
-
-	log.Println("Starting main server on :8080...")
-	router.Run(":8080")
+	logger.Infof("Run server :8080")
+	if err := router.Run(":8080"); err != nil {
+		logger.Fatalf("Failed to run server: %v", err)
+	}
+	logger.Infof("[ STOP ]")
 }
