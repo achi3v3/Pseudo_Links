@@ -37,7 +37,7 @@ func main() {
 	linkGroup := router.Group("/link")
 	{
 		linkGroup.POST("/create", linkHandler.Create)
-		linkGroup.GET("/get", linkHandler.Get)
+		linkGroup.GET("/get", linkHandler.GetPseudo)
 		linkGroup.DELETE("/delete", linkHandler.Delete)
 	}
 	router.GET("/", func(c *gin.Context) {
