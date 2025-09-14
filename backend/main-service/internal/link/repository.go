@@ -2,6 +2,7 @@ package link
 
 import (
 	"context"
+	"fmt"
 	"main-service/internal/models"
 	"time"
 
@@ -19,8 +20,13 @@ func NewLinkRepository(client *redis.Client) *LinkRepository {
 func (r *LinkRepository) Create(link *models.Link) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
-	return r.client.Set(ctx, link.OriginLink, link.PseudoLink, 0).Err()
+	if err := r.client.Set(ctx, link.OriginLink, link.PseudoLink, 0).Err(); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	if err := r.client.Set(ctx, link.PseudoLink, link.OriginLink, 0).Err(); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	return nil
 }
 
 func (r *LinkRepository) Find(originLink string) (link *models.Link, err error) {
@@ -44,8 +50,20 @@ func (r *LinkRepository) Find(originLink string) (link *models.Link, err error) 
 func (r *LinkRepository) Delete(originLink string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+	pseudoLink, err := r.client.Get(ctx, originLink).Result()
+	if err != nil {
+		if err != redis.Nil {
+			return err
+		}
+	}
+	if err := r.client.Del(ctx, originLink).Err(); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	if err := r.client.Del(ctx, pseudoLink).Err(); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	return nil
 
-	return r.client.Del(ctx, originLink).Err()
 }
 
 func (r *LinkRepository) Exist(originLink string) (bool, error) {
