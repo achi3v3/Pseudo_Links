@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"main-service/internal/database"
 	"main-service/internal/link"
 	"main-service/internal/logger"
@@ -24,6 +25,7 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
+	log.Println("Starting server...")
 
 	redisClient := database.Init()
 	defer redisClient.Close()
@@ -46,8 +48,10 @@ func main() {
 	logger.NewLogger()
 
 	go func() {
-		_ = metrics.Listen("127.0.0.1:8080")
+		log.Println("Starting metrics server on 127.0.0.1:8081...")
+		_ = metrics.Listen("127.0.0.1:8081")
 	}()
 
+	log.Println("Starting main server on :8080...")
 	router.Run(":8080")
 }

@@ -16,13 +16,15 @@ var client *redis.Client
 
 func Init() *redis.Client {
 	if err := godotenv.Load(); err != nil {
-		log.Printf("")
+		log.Printf("Warning: Error loading .env file: %v", err)
 	}
 
 	host := getEnv("REDIS_HOST", "localhost")
 	port := getEnv("REDIS_PORT", "6379")
 	password := getEnv("REDIS_PASSWORD", "")
 	db, _ := strconv.Atoi(getEnv("REDIS_DB", "0"))
+
+	log.Printf("Connecting to Redis at %s:%s", host, port)
 
 	client = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
@@ -35,7 +37,8 @@ func Init() *redis.Client {
 
 	_, err := client.Ping(ctx).Result()
 	if err != nil {
-		log.Printf("")
+		log.Printf("Error connecting to Redis: %v", err)
+		panic(fmt.Sprintf("Failed to connect to Redis: %v", err))
 	}
 	log.Println("Redis connected successfully")
 	return client
