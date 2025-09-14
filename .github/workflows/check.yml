@@ -48,7 +48,11 @@ jobs:
         run: |
           cd backend/main-service
           nohup go run main.go > server.log 2>&1 & echo $! > server.pid
+          sleep 5
 
+      - name: Show server logs
+        run: |
+          cat backend/main-service/server.log || echo "No server log found"
 
       - name: Wait for server to be ready
         run: |
