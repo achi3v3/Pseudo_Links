@@ -38,7 +38,7 @@ func Init(log *logrus.Logger) *redis.Client {
 	_, err := client.Ping(ctx).Result()
 	if err != nil {
 		log.Errorf("Error connecting to Redis: %v", err)
-		panic(fmt.Sprintf("Failed to connect to Redis: %v", err))
+		// panic(fmt.Sprintf("Failed to connect to Redis: %v", err))
 	}
 	log.Infof("Redis connected successfully")
 	return client

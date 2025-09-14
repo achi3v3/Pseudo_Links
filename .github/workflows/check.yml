@@ -27,7 +27,23 @@ jobs:
         run: |
           cd backend/main-service
           go mod tidy
+      - name: Check Redis logs
+        run: |
+          docker logs $(docker ps -q -f "ancestor=redis:latest") || true
 
+      - name: Wait for Redis to be ready
+        run: |
+          for i in {1..30}; do
+            if nc -z localhost 6379; then
+              echo "Redis is ready"
+              exit 0
+            fi
+            echo "Waiting for Redis..."
+            sleep 1
+          done
+          echo "Redis did not start"
+          exit 1
+          
       - name: Start server
         run: |
           cd backend/main-service
